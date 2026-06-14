@@ -1,0 +1,6 @@
+{
+  "name": "Google History Analyzer",
+  "description": "Analyze and visualize your Google user history from uploaded CSV and JSON files.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
