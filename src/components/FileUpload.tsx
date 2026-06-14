@@ -4,23 +4,20 @@ import {
   UploadCloud, 
   FileCode, 
   FileSpreadsheet, 
-  Sparkles, 
   AlertCircle, 
   Trash2,
-  CheckCircle,
-  HelpCircle
+  CheckCircle
 } from 'lucide-react';
-import { parseGoogleJSON, parseGoogleCSV, generateSampleData } from '../utils/parser';
+import { parseGoogleJSON, parseGoogleCSV } from '../utils/parser';
 import { HistoryItem, FileSummary } from '../types';
 
 interface FileUploadProps {
   onDataLoaded: (newItems: HistoryItem[], fileMeta: FileSummary) => void;
   uploadedFiles: FileSummary[];
   onClearAll: () => void;
-  onLoadSample: (format: 'JSON' | 'CSV') => void;
 }
 
-export function FileUpload({ onDataLoaded, uploadedFiles, onClearAll, onLoadSample }: FileUploadProps) {
+export function FileUpload({ onDataLoaded, uploadedFiles, onClearAll }: FileUploadProps) {
   const [isDragActive, setIsDragActive] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -170,33 +167,16 @@ export function FileUpload({ onDataLoaded, uploadedFiles, onClearAll, onLoadSamp
         )}
       </div>
 
-      {/* Guide & Sample load Buttons */}
+      {/* Guide & Active files queue */}
       <div className="lg:col-span-5 flex flex-col justify-between bg-white border border-slate-100/80 p-6 rounded-2xl shadow-[0_2px_8px_-3px_rgba(0,0,0,0.05)]">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="w-4 h-4 text-amber-500" />
-            <h3 className="font-bold text-slate-800 text-sm tracking-tight">Immediate Demo Playground</h3>
+            <CheckCircle className="w-4 h-4 text-emerald-500" />
+            <h3 className="font-bold text-slate-800 text-sm tracking-tight">Active Files Core Zone</h3>
           </div>
           <p className="text-xs font-medium text-slate-400 leading-relaxed mb-4">
-            Don't have your official Google Takeout file ready yet? Load high-fidelity instant mock data to experience the fully loaded timeline filters, routine trends, and metrics dashboard.
+            Upload your exported browser behavior history or Google MyActivity export files. All processing, layout extraction, safety scanning, and analytics happen directly inside your secure local browser container.
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-2.5 mb-2">
-            <button
-              onClick={() => onLoadSample('JSON')}
-              className="flex-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-100/60 font-bold text-xs py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <FileCode className="w-3.5 h-3.5" />
-              Demo YouTube (.JSON)
-            </button>
-            <button
-              onClick={() => onLoadSample('CSV')}
-              className="flex-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-100/60 font-bold text-xs py-2.5 px-4 rounded-xl transition flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <FileSpreadsheet className="w-3.5 h-3.5" />
-              Demo Search (.CSV)
-            </button>
-          </div>
         </div>
 
         {/* Uploaded Files Queue */}
@@ -217,7 +197,7 @@ export function FileUpload({ onDataLoaded, uploadedFiles, onClearAll, onLoadSamp
           </div>
 
           {uploadedFiles.length > 0 ? (
-            <div className="space-y-2 max-h-[85px] overflow-y-auto pr-1">
+            <div className="space-y-2 max-h-[140px] overflow-y-auto pr-1">
               {uploadedFiles.map((f, idx) => (
                 <div
                   key={`${f.name}-${idx}`}

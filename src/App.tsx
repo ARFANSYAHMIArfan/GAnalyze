@@ -5,7 +5,6 @@ import { DashboardCharts } from './components/DashboardCharts';
 import { HistoryTable } from './components/HistoryTable';
 import { FileUpload } from './components/FileUpload';
 import { HistoryItem, FileSummary } from './types';
-import { generateSampleData } from './utils/parser';
 import { 
   History, 
   HelpCircle, 
@@ -37,18 +36,6 @@ export default function App() {
         order: idx + 1 // uniform overall order matching the merged dataset
       })).reverse(); // show latest activity first by default
     });
-  };
-
-  // Demo sample initializer
-  const handleLoadSample = (format: 'JSON' | 'CSV') => {
-    const sampleItems = generateSampleData(format);
-    const mockMeta: FileSummary = {
-      name: `google_activity_takeout_sample.${format.toLowerCase()}`,
-      size: format === 'JSON' ? 124000 : 84000,
-      itemCount: sampleItems.length,
-      fileType: format,
-    };
-    handleDataLoaded(sampleItems, mockMeta);
   };
 
   const handleClearAll = () => {
@@ -153,7 +140,6 @@ export default function App() {
             onDataLoaded={handleDataLoaded} 
             uploadedFiles={uploadedFiles}
             onClearAll={handleClearAll}
-            onLoadSample={handleLoadSample}
           />
         </section>
 
@@ -193,22 +179,8 @@ export default function App() {
                 Ready for digital timeline analysis
               </h3>
               <p className="text-slate-400 text-xs font-semibold max-w-md mx-auto leading-relaxed">
-                Upload your extracted CSV or JSON activity records above, or choose an instant sample dataset to explore platform metrics, search trends, and peak usage hours.
+                Upload your extracted CSV or JSON activity records above to explore platform metrics, search trends, privacy safety ratings, and routine schedules.
               </p>
-            </div>
-            <div className="flex gap-2 mt-2">
-              <button 
-                onClick={() => handleLoadSample('JSON')} 
-                className="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer"
-              >
-                Load YouTube JSON Demo
-              </button>
-              <button 
-                onClick={() => handleLoadSample('CSV')} 
-                className="bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-xs font-bold px-4 py-2.5 rounded-xl transition cursor-pointer"
-              >
-                Load Google Search CSV Demo
-              </button>
             </div>
           </motion.div>
         )}
