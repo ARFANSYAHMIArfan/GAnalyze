@@ -233,6 +233,64 @@ export function parseGoogleCSV(csvText: string): HistoryItem[] {
 /**
  * Generate highly realistic, beautiful mock data for immediate user playground
  */
+export interface ThreatAssessment {
+  riskType: 'ADULT_OUTLET' | 'SCAM_HAZARD' | 'NONE';
+  severity: 'HIGH' | 'MEDIUM' | 'NONE';
+  label: string;
+  matchedTerm: string;
+  recodeAdvice: string;
+}
+
+export function assessItemThreat(title: string): ThreatAssessment {
+  const norm = title.toLowerCase();
+  
+  // Adult / Mature keywords
+  const adultKeywords = [
+    '18+', 'xxx', 'porn', 'nsfw', 'onlyfans', 'dating site', 'tinder', 'uncensored', 'nude', 
+    'escort', 'sexy chat', 'chaturbate', 'cam girl', 'casino online', 'free chips gambling', 'betting pool'
+  ];
+  
+  // Scam or dangerous link keywords
+  const scamKeywords = [
+    'free money claim', 'winner of standard prize', 'congratulations claim prize', 'earn $10000 free', 
+    'lottery award payout', 'cracked generator bypass', 'keygen crack download', 'key generator bypass',
+    'system is infected click', 'alert check bank credential', 'verify now security lock', 
+    'urgent banking validation alert', 'free gift card code giveaway', 'double your bitcoin now'
+  ];
+
+  for (const keyword of adultKeywords) {
+    if (norm.includes(keyword)) {
+      return {
+        riskType: 'ADULT_OUTLET',
+        severity: 'HIGH',
+        label: 'Sensitive / Adult Exposure Risk',
+        matchedTerm: keyword,
+        recodeAdvice: 'Recommended to clear this search from your active Google MyActivity console and review age restrictions or general profile sharing settings.'
+      };
+    }
+  }
+
+  for (const keyword of scamKeywords) {
+    if (norm.includes(keyword)) {
+      return {
+        riskType: 'SCAM_HAZARD',
+        severity: 'HIGH',
+        label: 'Scam, Fraud, or Dangerous Target',
+        matchedTerm: keyword,
+        recodeAdvice: 'Verify that you did not download unknown execution software or share standard credentials on suspicious redirect portals. Run a computer safety malware check.'
+      };
+    }
+  }
+
+  return {
+    riskType: 'NONE',
+    severity: 'NONE',
+    label: 'Clean / Standard Activity',
+    matchedTerm: '',
+    recodeAdvice: ''
+  };
+}
+
 export function generateSampleData(format: 'JSON' | 'CSV'): HistoryItem[] {
   const activities = [
     { title: 'Searched for React 19 server actions vs hooks', category: 'Google Search' },
@@ -257,6 +315,17 @@ export function generateSampleData(format: 'JSON' | 'CSV'): HistoryItem[] {
     { title: 'Used Voice Assistant: "Set a coder focus timer for 30 minutes"', category: 'Google Assistant' },
     { title: 'Searched for Figma to React tailwind component converter', category: 'Google Search' },
     { title: 'Watched AI Coding Agents are taking over? Deep dive', category: 'YouTube' },
+    
+    // Add realistic warning cues for Risk analysis demo!
+    { title: 'Searched for free mature dating site with uncensored webcam chat', category: 'Google Search' },
+    { title: 'Searched for onlyfans free account bypass generator hack', category: 'Google Search' },
+    { title: 'Watched watch hot 18+ streaming adult videos online', category: 'YouTube' },
+    { title: 'Searched for virtual casino online free chips gambling bets', category: 'Google Search' },
+    { title: 'Clicked link: congratulations claim prize reward free gift card code giveaway', category: 'Google Search' },
+    { title: 'Searched for keygen crack download or key generator bypass', category: 'Google Search' },
+    { title: 'Clicked suspicious redirection: system is infected click now to secure', category: 'Chrome' },
+    { title: 'Searched for how to double your bitcoin now instantly', category: 'Google Search' },
+    { title: 'Clicked alert: urgent banking validation alert verify now security lock', category: 'Google Search' },
   ];
 
   const parsedItems: HistoryItem[] = [];

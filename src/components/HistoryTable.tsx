@@ -333,7 +333,7 @@ export function HistoryTable({ items }: HistoryTableProps) {
               const fileTypeIsCSV = item.fileType === 'CSV';
               return (
                 <tr 
-                  key={item.id} 
+                  key={`${item.id}-${item.order}-${index}`} 
                   className="hover:bg-slate-50/40 transition-colors group"
                 >
                   <td className="py-3 px-4 font-mono text-xs text-slate-400">
